@@ -15,8 +15,8 @@ all:
 
 	chmod +x AppDir/AppRun
 
-	bin/appimagetool.AppImage AppDir $(OUTPUT)
-
+	export ARCH=x86_64 && bin/appimagetool.AppImage AppDir $(OUTPUT)
+	
 	chmod +x $(OUTPUT)
 
 	rm -f $(DESTINATION)
