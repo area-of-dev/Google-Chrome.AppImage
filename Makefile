@@ -36,9 +36,7 @@ all: clean
 	cp --force --recursive $(PWD)/build/opt/google/* $(PWD)/build/AppDir/	
 	cp --force --recursive $(PWD)/AppDir/* $(PWD)/build/AppDir
 
-	chmod 755 $(PWD)/build/AppDir/chrome/chrome-sandbox
-	# chown root $(PWD)/build/AppDir/chrome/chrome-sandbox
-
+	chmod 4755 $(PWD)/build/AppDir/chrome/chrome-sandbox
 
 	rm -rf AppDir/opt
 
