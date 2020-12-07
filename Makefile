@@ -21,23 +21,22 @@ all:  clean
 	wget --output-document="$(PWD)/build/build.deb" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 	dpkg -x $(PWD)/build/build.deb $(PWD)/build
 
-	echo "" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}:\$${APPDIR}/chrome" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "export LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "UUC_VALUE=`cat /proc/sys/kernel/unprivileged_userns_clone 2> /dev/null`" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "if [ -z \"\$${UUC_VALUE}\" ]" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "    then" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "        exec \$${APPDIR}/chrome/chrome --no-sandbox \"\$${@}\"" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "    else" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "        exec \$${APPDIR}/chrome/chrome \"\$${@}\"" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo "    fi" >> $(PWD)/build/Boilerplate.AppDir/AppRun
-
+	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${APPDIR}/chrome' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'export LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'UUC_VALUE=`cat /proc/sys/kernel/unprivileged_userns_clone 2> /dev/null`' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo 'if [ -z "$${UUC_VALUE}" ]' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '    then' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '        exec $${APPDIR}/chrome/chrome --no-sandbox "$${@}"' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '    else' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '        exec $${APPDIR}/chrome/chrome "$${@}"' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo '    fi' >> $(PWD)/build/Boilerplate.AppDir/AppRun
 
 	cp --force --recursive $(PWD)/build/opt/google/* $(PWD)/build/Boilerplate.AppDir/
 	chmod 4755 $(PWD)/build/Boilerplate.AppDir/chrome/chrome-sandbox
