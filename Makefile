@@ -11,41 +11,41 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 PWD:=$(shell pwd)
 
-all:  clean
 
-	mkdir --parents $(PWD)/build/Boilerplate.AppDir
-	apprepo --destination=$(PWD)/build appdir boilerplate libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0
+all: clean
+	mkdir --parents $(PWD)/build
 
 	wget --output-document="$(PWD)/build/build.deb" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 	dpkg -x $(PWD)/build/build.deb $(PWD)/build
 
-	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}:$${APPDIR}/chrome' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'export LD_LIBRARY_PATH=$${LD_LIBRARY_PATH}' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'UUC_VALUE=`cat /proc/sys/kernel/unprivileged_userns_clone 2> /dev/null`' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo 'if [ -z "$${UUC_VALUE}" ]' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '    then' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '        exec $${APPDIR}/chrome/chrome --no-sandbox "$${@}"' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '    else' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '        exec $${APPDIR}/chrome/chrome "$${@}"' >> $(PWD)/build/Boilerplate.AppDir/AppRun
-	echo '    fi' >> $(PWD)/build/Boilerplate.AppDir/AppRun
+	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/gtk3-3.22.30-6.el8.x86_64.rpm
+	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
 
-	cp --force --recursive $(PWD)/build/opt/google/* $(PWD)/build/Boilerplate.AppDir/
-	chmod 4755 $(PWD)/build/Boilerplate.AppDir/chrome/chrome-sandbox
+	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/atk-2.28.1-1.el8.x86_64.rpm
+	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
 
-	rm --force $(PWD)/build/Boilerplate.AppDir/*.desktop
+	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/at-spi2-atk-2.26.2-1.el8.x86_64.rpm
+	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
 
-	cp --force $(PWD)/AppDir/*.desktop $(PWD)/build/Boilerplate.AppDir/
-	cp --force $(PWD)/AppDir/*.png $(PWD)/build/Boilerplate.AppDir/ || true
-	cp --force $(PWD)/AppDir/*.svg $(PWD)/build/Boilerplate.AppDir/ || true
+	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/at-spi2-core-2.28.0-1.el8.x86_64.rpm
+	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
 
-	export ARCH=x86_64 && $(PWD)/bin/appimagetool.AppImage $(PWD)/build/Boilerplate.AppDir $(PWD)/Google-Chrome.AppImage
+
+
+	mkdir --parents $(PWD)/build/AppDir
+	cp --force --recursive $(PWD)/build/usr/* $(PWD)/build/AppDir/
+	cp --force --recursive $(PWD)/build/opt/google/* $(PWD)/build/AppDir/	
+	cp --force --recursive $(PWD)/AppDir/* $(PWD)/build/AppDir
+
+	chmod 4755 $(PWD)/build/AppDir/chrome/chrome-sandbox
+
+	rm -rf AppDir/opt
+
+	chmod +x $(PWD)/build/AppDir/AppRun
+	chmod +x $(PWD)/build/AppDir/*.desktop
+
+
+	export ARCH=x86_64 && $(PWD)/bin/appimagetool.AppImage $(PWD)/build/AppDir $(PWD)/Google-Chrome.AppImage
 	chmod +x $(PWD)/Google-Chrome.AppImage
 
 clean:
