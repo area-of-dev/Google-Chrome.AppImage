@@ -13,40 +13,32 @@ PWD:=$(shell pwd)
 
 
 all: clean
-	mkdir --parents $(PWD)/build
+	mkdir --parents $(PWD)/build/Boilerplate.AppDir
+	apprepo --destination=$(PWD)/build appdir boilerplate libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libreadline8 at-spi2-core
 
 	wget --output-document="$(PWD)/build/build.deb" https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 	dpkg -x $(PWD)/build/build.deb $(PWD)/build
 
-	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/gtk3-3.22.30-6.el8.x86_64.rpm
-	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
+	cp --force --recursive $(PWD)/build/usr/*			$(PWD)/build/Boilerplate.AppDir/
+	cp --force --recursive $(PWD)/build/opt/google/* 	$(PWD)/build/Boilerplate.AppDir/
 
-	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/atk-2.28.1-1.el8.x86_64.rpm
-	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
+	chmod 4755 $(PWD)/build/Boilerplate.AppDir/chrome/chrome-sandbox
+	chmod 4755 $(PWD)/build/Boilerplate.AppDir/chrome/chrome
 
-	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/at-spi2-atk-2.26.2-1.el8.x86_64.rpm
-	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
+	echo "LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}:\$${APPDIR}/chrome" 	>> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo "export LD_LIBRARY_PATH=\$${LD_LIBRARY_PATH}" 				>> $(PWD)/build/Boilerplate.AppDir/AppRun
+	echo "exec \$${APPDIR}/chrome/google-chrome \"\$${@}\"" 		>> $(PWD)/build/Boilerplate.AppDir/AppRun
 
-	wget --no-check-certificate --output-document=$(PWD)/build/build.rpm http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/at-spi2-core-2.28.0-1.el8.x86_64.rpm
-	cd $(PWD)/build && rpm2cpio $(PWD)/build/build.rpm | cpio -idmv && cd ..
+	rm -f $(PWD)/build/Boilerplate.AppDir/*.desktop 		|| true
+	rm -f $(PWD)/build/Boilerplate.AppDir/*.png 		  	|| true
+	rm -f $(PWD)/build/Boilerplate.AppDir/*.svg 		  	|| true
 
+	cp --force $(PWD)/AppDir/*.desktop 			$(PWD)/build/Boilerplate.AppDir/ || true
+	cp --force $(PWD)/AppDir/*.png 				$(PWD)/build/Boilerplate.AppDir/ || true
+	cp --force $(PWD)/AppDir/*.svg 				$(PWD)/build/Boilerplate.AppDir/ || true
 
-
-	mkdir --parents $(PWD)/build/AppDir
-	cp --force --recursive $(PWD)/build/usr/* $(PWD)/build/AppDir/
-	cp --force --recursive $(PWD)/build/opt/google/* $(PWD)/build/AppDir/	
-	cp --force --recursive $(PWD)/AppDir/* $(PWD)/build/AppDir
-
-	chmod 4755 $(PWD)/build/AppDir/chrome/chrome-sandbox
-
-	rm -rf AppDir/opt
-
-	chmod +x $(PWD)/build/AppDir/AppRun
-	chmod +x $(PWD)/build/AppDir/*.desktop
-
-
-	export ARCH=x86_64 && $(PWD)/bin/appimagetool.AppImage $(PWD)/build/AppDir $(PWD)/Google-Chrome.AppImage
-	chmod +x $(PWD)/Google-Chrome.AppImage
+	 export ARCH=x86_64 && $(PWD)/bin/appimagetool.AppImage $(PWD)/build/Boilerplate.AppDir $(PWD)/Google-Chrome.AppImage
+	 chmod +x $(PWD)/Google-Chrome.AppImage
 
 clean:
 	rm -rf $(PWD)/build
