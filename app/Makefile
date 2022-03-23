@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 PWD:=$(shell pwd)
 
+.PHONY: all
 
 all: clean init
 	mkdir --parents $(PWD)/build/Boilerplate.AppDir
@@ -52,4 +53,5 @@ init:
 	chmod +x $(PWD)/bin/appimagetool.AppImage
 
 clean:
+	rm -rf $(PWD)/*.AppImage
 	rm -rf $(PWD)/build

@@ -32,6 +32,5 @@ all: clean
 clean:
 	$(DOCKER_COMPOSE) up -d  "appimage"
 	$(DOCKER_COMPOSE) run    "appimage" make clean
-	$(DOCKER_COMPOSE) run    "appimage" rm -f ./*.AppImage
 	$(DOCKER_COMPOSE) rm --stop --force
 
