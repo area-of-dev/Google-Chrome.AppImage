@@ -54,4 +54,5 @@ init:
 
 clean:
 	rm -rf $(PWD)/*.AppImage
+	rm -rf $(PWD)/bin/*
 	rm -rf $(PWD)/build
