@@ -52,7 +52,7 @@ init:
 		--output-document=$(PWD)/bin/Apprepo.AppImage
 	chmod +x $(PWD)/bin/Apprepo.AppImage
 
-	wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
+	wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage \
 		--output-document=$(PWD)/bin/appimagetool.AppImage
 	chmod +x $(PWD)/bin/appimagetool.AppImage
 
