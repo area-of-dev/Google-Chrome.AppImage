@@ -11,9 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 FROM ubuntu:23.10
 
-ARG TOKEN
-ENV TOKEN=${TOKEN}
-
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENV DEBIAN_FRONTEND=noninteractive 
 
